@@ -1,0 +1,49 @@
+conveyor = Create(conveyor,[mark all],[voc [0,10],[1,20],[2,30]],[tran [0,
+           11,1],[1,13,0],[1,20,2],[2,15,0]])  (3,4)
+
+vision = Create(vision,[mark all],[voc [0,10],[1,20],[2,30]],[tran [0,21,1
+         ],[1,22,0],[1,24,2],[2,23,0]])  (3,4)
+
+robot = Create(robot,[mark all],[voc [0,10],[1,20],[2,30],[3,40]],[tran [0
+        ,31,1],[1,32,2],[1,34,3],[2,33,0],[3,35,0]])  (4,5)
+
+cv = Sync(conveyor,vision)  (9,24)  Blocked_events = None  
+
+plant = Sync(cv,robot)  (36,141)  Blocked_events = None  
+
+H2 = Create(H2,[mark all],[voc [0,10],[1,20]],[tran [0,20,1],[1,15,0],[1,2
+     0,1]])  (2,3)
+
+H3 = Create(H3,[mark all],[voc [0,10],[1,20]],[tran [0,24,1],[1,23,0],[1,2
+     4,1]])  (2,3)
+
+H4 = Create(H4,[mark all],[voc [0,10],[1,20]],[tran [0,31,0],[0,34,1],[1,3
+     4,1],[1,35,0]])  (2,4)
+
+H1 = Create(H1,[mark all],[voc [0,10],[1,20],[2,30],[3,40]],[tran [0,11,0]
+     ,[0,13,1],[0,21,0],[0,22,2],[1,11,0],[1,13,1],[1,21,1],[1,22,3],[2,11
+     ,0],[2,13,3],[2,21,2],[2,22,2],[3,11,0],[3,13,3],[3,22,3],[3,31,0]]) 
+      (4,16)
+
+spec12 = Sync(H1,H2)  (8,44)  Blocked_events = None  
+
+spec123 = Sync(spec12,H3)  (16,112)  Blocked_events = None  
+
+specs = Sync(spec123,H4)  (32,268)  Blocked_events = None  
+
+supervisor = Supcon(plant,specs)  (24,61)
+
+supervisor_trim = Trim(supervisor)  (24,61)
+
+H5 = Create(H5,[mark all],[voc [0,10],[1,20]],[tran [0,20,1],[0,31,0],[1,1
+     5,0],[1,31,1]])  (2,4)
+
+H6 = Create(H6,[mark all],[voc [0,10],[1,20],[2,30],[3,40]],[tran [0,24,1]
+     ,[1,24,2],[2,24,3],[3,23,0]])  (4,4)
+
+spec12345 = Sync(specs,H5)  (32,252)  Blocked_events = None  
+
+specs_ext = Sync(spec12345,H6)  (64,472)  Blocked_events = None  
+
+supervisor = Supcon(plant,specs_ext)  (24,53)
+
